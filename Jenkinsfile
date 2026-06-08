@@ -1,8 +1,9 @@
 pipeline {
     agent any
-    triggers {
-        cron('33 14 * * *')
-    }
+   triggers {
+    cron('33 11 * * *')
+    pollSCM('0 * * * *')
+}
     stages {
         stage('Clone Code') {
             steps {
