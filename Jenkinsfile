@@ -1,9 +1,9 @@
 pipeline {
     agent any
-   triggers {
-    cron('33 14 * * *')
-    pollSCM('0 * * * *')
-}
+    triggers {
+        cron('33 14 * * *')
+        pollSCM('0 * * * *')
+    }
     stages {
         stage('Clone Code') {
             steps {
@@ -21,7 +21,7 @@ pipeline {
         stage('Run Selenium Tests') {
             steps {
                 bat '''
-                    for %%f in (Python_selenium_learn\\handlingframe.py Python_selenium_learn\\logincorrectemailandpass.py Python_selenium_learn\\logincorrectmailandpass.py Python_selenium_learn\\logoutuser.py Python_selenium_learn\\registerexistingemail.py Python_selenium_learn\\registeruser.py) do (
+                    for %%f in (Python_selenium_learn\\*.py) do (
                         echo Running %%f
                         myselenium\\Scripts\\python.exe %%f
                     )
