@@ -37,8 +37,9 @@ if driver.title == "Automation Exercise":
 else:
     print("Homepage not loaded")
 
+dismiss_ads(driver)
 signupButton = driver.find_element(By.XPATH, '//*[@id="header"]//div[@class="shop-menu pull-right"]/ul/li[4]/a[text()=" Signup / Login"]')
-signupButton.click()
+driver.execute_script("arguments[0].click();", signupButton)
 
 signupText = driver.find_element(By.XPATH, value='//div[@class="signup-form"]/h2')
 if signupText.is_displayed():
@@ -50,8 +51,21 @@ name = driver.find_element(By.XPATH, "//input[@name='name']")
 name.send_keys("bala")
 email = driver.find_element(By.XPATH, '//*[@id="form"]/div/div/div[3]/div/form/input[3]')
 email.send_keys("bala7994@gmail.com")
+
+dismiss_ads(driver)
 signupbutton = driver.find_element(By.XPATH, "//button[contains(text(),'Signup')]")
-signupbutton.click()
+driver.execute_script("arguments[0].click();", signupbutton)
+
+try:
+    error_msg = WebDriverWait(driver, 5).until(
+        expected_conditions.visibility_of_element_located(
+            (By.XPATH, "//p[text()='Email Address already exist!']")
+        )
+    )
+    print(f"Registration failed: {error_msg.text}")
+    driver.quit()
+except:
+    pass
 
 password = wait.until(expected_conditions.visibility_of_element_located((By.XPATH, "//input[@id='password']"))).send_keys("balacse123")
 firstName = driver.find_element(By.XPATH, value="//input[@id='first_name']")
@@ -69,19 +83,21 @@ zipcode = driver.find_element(By.XPATH, value="//input[@id='zipcode']")
 zipcode.send_keys("634256")
 mobile = driver.find_element(By.XPATH, value="//input[@id='mobile_number']")
 mobile.send_keys("1234567890")
-# dismiss_ads(driver)
 
+dismiss_ads(driver)
 createAccountButton = driver.find_element(By.XPATH, value="//button[contains(text(),'Create Account')]")
-createAccountButton.click()
+driver.execute_script("arguments[0].scrollIntoView(true);", createAccountButton)
+driver.execute_script("arguments[0].click();", createAccountButton)
 
 successText = driver.find_element(By.XPATH, value='//*[@id="form"]/div/div/div/h2/b')
-if successText.is_displayed:
+if successText.is_displayed():
     print("Account created")
 else:
     print("Account not created")
 
+dismiss_ads(driver)
 continueBut = driver.find_element(By.XPATH, value='//div[@class="pull-right"]/a[text()="Continue"]')
-continueBut.click()
+driver.execute_script("arguments[0].click();", continueBut)
 
 loggedInElement = wait.until(
     expected_conditions.visibility_of_element_located(
@@ -95,6 +111,7 @@ if "Logged in as bala" in loginmessage:
 else:
     print("Message not displayed")
 
+dismiss_ads(driver)
 deleteButton = driver.find_element(By.XPATH, value='//*[@id="header"]//div[@class="shop-menu pull-right"]//li[5]/a[text()=" Delete Account"]')
 driver.execute_script("arguments[0].click();", deleteButton)
 
@@ -105,6 +122,6 @@ else:
     print("Account not deleted")
 
 continuebutton = driver.find_element(By.XPATH, value='//*[@id="form"]/div/div/div/div/a')
-continuebutton.click()
+driver.execute_script("arguments[0].click();", continuebutton)
 
 driver.close()
