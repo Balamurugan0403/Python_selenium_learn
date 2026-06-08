@@ -19,7 +19,12 @@ pipeline {
         }
         stage('Run Selenium Tests') {
             steps {
-                bat 'myselenium\\Scripts\\python.exe Python_selenium_learn\\registerexistingemail.py'
+                bat '''
+                    for %%f in (Python_selenium_learn\\*.py) do (
+                        echo Running %%f
+                        myselenium\\Scripts\\python.exe %%f
+                    )
+                '''
             }
         }
     }
