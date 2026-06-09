@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 
 
 @pytest.mark.usefixtures("test_setup_and_teardown")
-class TestSearch:
+class testsearch:
 
     def test_validproduct(self):
 
