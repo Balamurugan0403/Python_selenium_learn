@@ -1,0 +1,3 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","4894","test_valid_login[karthiksiva-karthik@123]","Tests","2026-06-09","passed","2026-06-09","TestLogin","Test_Login","",""
+"","10235","test_valid_login[arasu-arasu]","Tests","2026-06-09","broken","2026-06-09","TestLogin","Test_Login","",""
