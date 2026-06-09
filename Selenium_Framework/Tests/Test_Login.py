@@ -28,43 +28,50 @@ class TestLogin:
     )
     def test_valid_login(self, username, password):
 
+        # DEBUG — detailed step info
+        self.logger.debug(
+            f"Test started with username='{username}', password='{password}'"
+        )
+
+        # INFO — normal flow
         self.logger.info(
             f"Starting login test for user: {username}"
         )
 
-        WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable(
-                (By.ID, "login2")
+        try:
+            WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable(
+                    (By.ID, "login2")
+                )
+            ).click()
+            self.logger.info("Clicked login button")
+
+        except Exception as e:
+            # ERROR — something failed unexpectedly
+            self.logger.error(
+                f"Failed to click login button: {e}"
             )
-        ).click()
+            raise
 
-        self.logger.info("Clicked login button")
-
-        WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located(
-                (By.ID, "logInModalLabel")
+        try:
+            WebDriverWait(self.driver, 10).until(
+                EC.visibility_of_element_located(
+                    (By.ID, "logInModalLabel")
+                )
             )
-        )
+            self.logger.debug("Login modal is visible")
 
-        self.driver.find_element(
-            By.ID,
-            "loginusername"
-        ).clear()
+        except Exception as e:
+            self.logger.error(
+                f"Login modal did not appear: {e}"
+            )
+            raise
 
-        self.driver.find_element(
-            By.ID,
-            "loginusername"
-        ).send_keys(username)
+        self.driver.find_element(By.ID, "loginusername").clear()
+        self.driver.find_element(By.ID, "loginusername").send_keys(username)
 
-        self.driver.find_element(
-            By.ID,
-            "loginpassword"
-        ).clear()
-
-        self.driver.find_element(
-            By.ID,
-            "loginpassword"
-        ).send_keys(password)
+        self.driver.find_element(By.ID, "loginpassword").clear()
+        self.driver.find_element(By.ID, "loginpassword").send_keys(password)
 
         self.logger.info("Entered credentials")
 
@@ -76,27 +83,36 @@ class TestLogin:
         self.logger.info("Clicked Log in button")
 
         try:
-
             WebDriverWait(self.driver, 5).until(
                 EC.alert_is_present()
             )
-
             alert = self.driver.switch_to.alert
+            alert_text = alert.text
 
-            self.logger.info(
-                f"Alert found: {alert.text}"
+            # WARNING — login alert means invalid credentials
+            self.logger.warning(
+                f"Login alert appeared for user '{username}': {alert_text}"
             )
 
             alert.accept()
 
         except Exception:
-            pass
+            # DEBUG — no alert is normal/expected
+            self.logger.debug("No alert found — proceeding normally")
 
-        welcome_message = WebDriverWait(self.driver, 15).until(
-            EC.visibility_of_element_located(
-                (By.ID, "nameofuser")
+        try:
+            welcome_message = WebDriverWait(self.driver, 15).until(
+                EC.visibility_of_element_located(
+                    (By.ID, "nameofuser")
+                )
             )
-        )
+
+        except Exception as e:
+            # ERROR — login did not succeed
+            self.logger.error(
+                f"Welcome message not found for user '{username}': {e}"
+            )
+            raise
 
         check.is_true(
             welcome_message.is_displayed(),
@@ -109,24 +125,26 @@ class TestLogin:
             "Username not in welcome message"
         )
 
+        # INFO — test passed
         self.logger.info(
-            f"Login passed! Welcome text: "
-            f"{welcome_message.text}"
+            f"Login passed! Welcome text: {welcome_message.text}"
         )
 
         print(
-            f"Login passed! Welcome text: "
-            f"{welcome_message.text}"
+            f"Login passed! Welcome text: {welcome_message.text}"
         )
 
-        logout = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable(
-                (By.ID, "logout2")
+        try:
+            logout = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable(
+                    (By.ID, "logout2")
+                )
             )
-        )
+            logout.click()
+            self.logger.info("Logged out successfully")
 
-        logout.click()
-
-        self.logger.info(
-            "Logged out successfully"
-        )
+        except Exception as e:
+            # WARNING — logout failed but test already passed
+            self.logger.warning(
+                f"Logout failed for user '{username}': {e}"
+            )
