@@ -1,7 +1,8 @@
 import pytest
 from selenium import webdriver
 
-@pytest.fixture(scope="class")
+
+@pytest.fixture(scope="function")
 def setup(request):
 
     driver = webdriver.Chrome()
