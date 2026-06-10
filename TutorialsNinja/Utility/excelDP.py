@@ -1,17 +1,14 @@
-from openpyxl import Workbook
 import openpyxl
+import os
 
-
-def get_Excel_Data(path, sheet_name):
-    fl = []
+def get_Excel_Data(sheet_name):
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(base_dir, "..", "DataProviders", "loginTN.xlsx")
+    
     Workbook = openpyxl.load_workbook(path)
-    sheet = Workbook[sheet_name]
-    tr = sheet.max_row
-    tc = sheet.max_column
-
-    for r in range(2, tr + 1):
-        rl = []
-        for c in range(1, tc + 1):
-            rl.append(sheet.cell(r, c).value)
-        fl.append(rl)
-    return fl
+    Sheet = Workbook[sheet_name]
+    
+    rows = []
+    for row in Sheet.iter_rows(min_row=2, values_only=True):
+        rows.append(row)
+    return rows
