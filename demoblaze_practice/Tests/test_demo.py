@@ -13,8 +13,8 @@ def test_login(setup):
     driver.find_element(By.ID, "login2").click()
     time.sleep(2)
 
-    driver.find_element(By.ID, "loginusername").send_keys("test123")
-    driver.find_element(By.ID, "loginpassword").send_keys("test123")
+    driver.find_element(By.ID, "loginusername").send_keys("karthiksiva")
+    driver.find_element(By.ID, "loginpassword").send_keys("karthik@123")
 
     driver.find_element(By.XPATH, "//button[text()='Log in']").click()
 
