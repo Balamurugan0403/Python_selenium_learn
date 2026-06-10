@@ -1,6 +1,8 @@
 import pytest
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.alert import Alert
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import time
 
 @pytest.mark.smoke
@@ -32,7 +34,7 @@ def test_add_to_cart(setup):
 
     driver = setup
 
-    driver.find_element(By.LINK_TEXT, "Samsung galaxy s6").click()
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.LINK_TEXT, "Samsung galaxy s6"))).click()
 
     time.sleep(2)
 
